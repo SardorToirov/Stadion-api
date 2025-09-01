@@ -1,10 +1,15 @@
 from django.urls import path
-from stadiums.views import StadionViews,StadionViewsList,StadionViewsUpdate,StadionViewsDelete
+from stadiums.views import (
+    StadionCreateView,
+    StadionListView,
+    StadionUpdateView,
+    StadionDeleteView,
 
+)
 
 urlpatterns = [
-    path('create/',StadionViews.as_view()),
-    path('list/',StadionViewsList.as_view()),
-    path('update/',StadionViewsUpdate.as_view()),
-    path('delete/',StadionViewsDelete.as_view())
+    path('create/', StadionCreateView.as_view(), name='stadium-create'),
+    path('list/', StadionListView.as_view(), name='stadium-list'),
+    path('update/<int:pk>/', StadionUpdateView.as_view(), name='stadium-update'),
+    path('delete/<int:pk>/', StadionDeleteView.as_view(), name='stadium-delete'),
 ]
