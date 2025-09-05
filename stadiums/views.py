@@ -5,29 +5,39 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Stadium
 from .serializers import StadiumSerializer
 from .permissions import IsOwnerCreated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+from rest_framework import status
+from drf_spectacular.utils import extend_schema
 
+class StadionListView(APIView):
+    def get(self,request):
+        stadiums = Stadium.objects.all()
+        serializers = StadiumSerializer(stadiums,many=True)
 
-class StadionCreateView(CreateAPIView):
-    queryset = Stadium.objects.all()
-    serializer_class = StadiumSerializer
-    permission_classes = [IsAuthenticated]
+        return Response(serializers.data)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+@extend_schema(request=StadiumSerializer)
+class StadionCreateView(APIView):
 
+    def post(self, request):
 
-class StadionListView(ListAPIView):
-    queryset = Stadium.objects.all()
-    serializer_class = StadiumSerializer
+        if request.user.role != "owner":
+            raise ValidationError({"errors":"owner bilan kiring!"})
 
+        serializer = StadiumSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-class StadionUpdateView(UpdateAPIView):
-    queryset = Stadium.objects.all()
-    serializer_class = StadiumSerializer
-    permission_classes = [IsOwnerCreated]
+# class StadionListView(ListAPIView):
+#
+#
+# class StadionUpdateView(UpdateAPIView):
+#
+#
+#
+# class StadionDeleteView(DestroyAPIView):
 
-
-class StadionDeleteView(DestroyAPIView):
-    queryset = Stadium.objects.all()
-    serializer_class = StadiumSerializer
-    permission_classes = [IsOwnerCreated]

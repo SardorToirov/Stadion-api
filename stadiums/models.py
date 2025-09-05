@@ -8,24 +8,21 @@ class Stadium(models.Model):
         ('eski', 'old'),
     )
 
-
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
-    price = models.IntegerField()
-    weight = models.IntegerField()
-    height = models.IntegerField()
+    price = models.IntegerField(default=0)
+    weight = models.IntegerField(default=0)
+    height = models.IntegerField(default=0)
     stadions_status = models.CharField(max_length=10, choices=CHOICES, default='o\'rta')
-    
-
 
     def __str__(self):
         return self.name
-    
+
 
 class StadionsImage(models.Model):
     stadium = models.ForeignKey(Stadium, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='stadiums/')
+    image = models.ImageField(upload_to='stadion/')
 
     def __str__(self):
         return f"Image for {self.stadium.name}"

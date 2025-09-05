@@ -4,7 +4,9 @@ from users.models import User
 class StadiumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stadium
-        fields = "__all__"
+        fields = ["id","name","address","price","weight","height","stadions_status"]
+
+
 
 
 
