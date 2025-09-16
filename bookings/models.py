@@ -1,7 +1,7 @@
 from django.db import models
 from stadiums.models import Stadium
 from users.models import User
-
+import datetime
 # Create your models here.
 class Booking(models.Model):
     choices = (
@@ -13,6 +13,7 @@ class Booking(models.Model):
     stadium = models.ForeignKey(Stadium, on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
+    day = models.DateField(default=datetime.date.today)
     status = models.CharField(max_length=20, choices=choices, default='pending')
 
     def __str__(self):

@@ -2,21 +2,50 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics,permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import UserSerializer ,LoginSerializers,LoginSerializer
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
+from django.contrib.auth import authenticate
+from drf_spectacular.utils import extend_schema
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import login
 User = get_user_model()
 
-class RegisterViews(generics.CreateAPIView):
+
+
+class ProfileViews(APIView):
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class ProfileViews(generics.RetrieveAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
+@extend_schema(request=LoginSerializer)
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data["username"]
+        print(username)
+        password = request.data["password"]
 
-class LoginViews(TokenObtainPairView):
-    serializer_class = LoginSerializer
 
+        user = authenticate(username=username, password=password)
+        if not user:
+            return Response({"error": "Username yoki parol noto‘g‘ri!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(user)
+        login(request,user)
+        return Response(
+            {
+                "message": "Login muvaffaqiyatli!",
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            status=status.HTTP_200_OK
+        )
 

@@ -1,12 +1,11 @@
 from rest_framework import serializers
 from .models import Stadium
-from users.models import User
+
+
 class StadiumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stadium
-        fields = ["id","name","address","price","weight","height","stadions_status"]
-
-
-
-
-
+        fields = ["id", "name", "owner", "address", "price", "weight", "height", "stadions_status"]
+        extra_kwargs = {
+            "owner": {"read_only": True}  # owner API orqali kiritilmaydi
+        }
