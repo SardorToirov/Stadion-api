@@ -19,7 +19,9 @@ class ListBookingView(APIView):
 @extend_schema(request=BookingSerializer)
 class CreateBookingView(APIView):
     def post(self,request):
+        print("SALOM")
         serializers = BookingSerializer(data=request.data)
+        print(request.user)
         if serializers.is_valid():
             stadium = serializers.validated_data["stadium"]
             day = serializers.validated_data["day"]

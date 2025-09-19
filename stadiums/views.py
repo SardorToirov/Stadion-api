@@ -16,8 +16,6 @@ class StadionListView(APIView):
 @extend_schema(request=StadiumSerializer)
 class StadionCreateView(APIView):
     def post(self, request):
-        print(request.user.role)
-        print(request.user)
         if request.user.role != "owner":
             raise ValidationError({"errors": "Faqat owner stadion qo‘shishi mumkin!"})
 
@@ -51,15 +49,4 @@ class StadionDeleteView(APIView):
             stadium.delete()
             return Response({"success":"stadion o'chirildi!  "})
         raise ValidationError({"ERRORS":"STADION TOPILMADII!!!!!!!!!"})
-
-
-
-# class StadionListView(ListAPIView):
-#
-#
-# class StadionUpdateView(UpdateAPIView):
-#
-#
-#
-# class StadionDeleteView(DestroyAPIView):
 

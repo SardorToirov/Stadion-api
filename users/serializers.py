@@ -26,21 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializers(serializers.ModelSerializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-
-    def validate(self,attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
-
-        user = authenticate(username=username,password=password)
-
-        if not user:
-            raise AuthenticationFailed("User yoki parol xato ")
-        attrs['user'] = user
-        return attrs
-
 
 class LoginSerializer(TokenObtainPairSerializer):
     @classmethod
