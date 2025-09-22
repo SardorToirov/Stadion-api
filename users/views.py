@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics,permissions
+from rest_framework import generics
 from .serializers import UserSerializer ,LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -29,7 +29,6 @@ class RegisterView(generics.CreateAPIView):
 class LoginView(APIView):
     def post(self, request):
         username = request.data["username"]
-        print(username)
         password = request.data["password"]
 
 
@@ -41,7 +40,6 @@ class LoginView(APIView):
         login(request,user)
         return Response(
             {
-                "message": "Login muvaffaqiyatli!",
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
             },
