@@ -37,4 +37,4 @@ Django REST Framework (DRF) asosida yaratilgan API bo‘lib, foydalanuvchilar st
 1. Loyihani yuklab olish:
    ```bash
    git clone https://github.com/SardorToirov/Stadion-api.git
-   cd stadion-booking-api ```
+   cd Stadion-api ```
