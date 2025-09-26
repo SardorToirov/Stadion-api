@@ -44,7 +44,6 @@ class StadionUpdateView(APIView):
 class StadionDeleteView(APIView):
     def delete(self,request,id):
         stadium = Stadium.objects.filter(id=id)
-        print(stadium)
         if stadium:
             stadium.delete()
             return Response({"success":"stadion o'chirildi!  "})

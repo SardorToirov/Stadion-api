@@ -6,11 +6,27 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
 from django.utils import timezone
+import datetime
 
 # Create your views here.
 # -- stadion id keladi va bronlar royhati chiqadi hozidan keyngisi
-class BookingStadion(APIView):
 
+class IntermediateBooking(APIView):
+    def get(self,request,start_time,end_time):
+        now = timezone.now().time()
+        today = timezone.now().date()
+        booking = Booking.objects.filter(
+                                         day__gte=today,
+                                         start_time__gte=start_time,
+                                         end_time__lte=end_time,
+                                         start_time__gt=now,
+
+                                         ).order_by("start_time")
+        serializer = BookingSerializer(booking,many=True)
+        return Response(serializer.data)
+
+
+class BookingStadion(APIView):
     def get(self,request):
         today = timezone.now().date()
         booking = Booking.objects.filter(day__gte=today).order_by("day")
