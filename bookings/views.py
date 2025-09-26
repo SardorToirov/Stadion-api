@@ -39,7 +39,6 @@ class ListBookingView(APIView):
         booking = Booking.objects.all()
         serializers = BookingSerializer(booking,many=True)
         return Response(serializers.data)
-
 # POST
 @extend_schema(request=BookingSerializer)
 class CreateBookingView(APIView):
