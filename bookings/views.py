@@ -10,6 +10,7 @@ from django.utils import timezone
 # Create your views here.
 # -- stadion id keladi va bronlar royhati chiqadi hozidan keyngisi
 class BookingStadion(APIView):
+
     def get(self,request):
         today = timezone.now().date()
         booking = Booking.objects.filter(day__gte=today).order_by("day")
