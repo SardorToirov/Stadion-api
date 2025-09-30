@@ -6,23 +6,21 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
 from django.utils import timezone
-import datetime
+from datetime import datetime
+from django.db.models import Q
 
-# Create your views here.
-# -- stadion id keladi va bronlar royhati chiqadi hozidan keyngisi
 
 class IntermediateBooking(APIView):
-    def get(self,request,start_time,end_time):
-        now = timezone.now().time()
+    def get(self, request, start_time, end_time):
+        start_time = datetime.strptime(start_time, "%H:%M").time()
+        end_time = datetime.strptime(end_time, "%H:%M").time()
         today = timezone.now().date()
-        booking = Booking.objects.filter(
-                                         day__gte=today,
-                                         start_time__gte=start_time,
-                                         end_time__lte=end_time,
-                                         start_time__gt=now,
 
-                                         ).order_by("start_time")
-        serializer = BookingSerializer(booking,many=True)
+        booking = Booking.objects.filter(day__gte=today,).filter(
+            Q(start_time__lt=end_time) & Q(end_time__gt=start_time)
+        ).order_by("start_time")
+
+        serializer = BookingSerializer(booking, many=True)
         return Response(serializer.data)
 
 

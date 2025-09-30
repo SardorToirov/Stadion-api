@@ -6,7 +6,3 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# class BookingTimeSerializer(serializers):
-#     class Meta:
-#         model = Booking
-#         field = ["start_time","end_time"]
